@@ -4,6 +4,8 @@ extends Node
 ## It can send actions, and emits signals when events are received.
 
 signal connection_state_changed(new_state: WebSocketPeer.State)
+signal websocket_opened
+signal websocket_closed
 signal pushed_info_message(message: String)
 
 signal lobby_started(event: BellhopLobbyStarted)
@@ -50,6 +52,7 @@ func join_lobby(lobby_id: String):
 func _handle_bellhop_event(event: BellhopEvent):
 	if event is BellhopLobbyStarted:
 		pushed_info_message.emit("Lobby started! id: " + event.lobby_id)
+		lobby_started.emit(event)
 		return
 	if event is BellhopReceivedJoinRequest:
 		pushed_info_message.emit(
@@ -108,10 +111,12 @@ func _on_connection_state_changed(new_state: WebSocketPeer.State):
 		WebSocketPeer.STATE_CONNECTING:
 			print("Connecting to websocket server...")
 		WebSocketPeer.STATE_OPEN:
+			websocket_opened.emit()
 			print("Websocket is open!")
 		WebSocketPeer.STATE_CLOSING:
 			print("Connection to websocket server closing...")
 		WebSocketPeer.STATE_CLOSED:
+			websocket_closed.emit()
 			print(
 				"Connection to websocket server closed with code {close_code}".format(
 					{"close_code": _ws_peer.get_close_code()}
