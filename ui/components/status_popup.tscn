@@ -1,0 +1,179 @@
+[gd_scene load_steps=11 format=3 uid="uid://bu0dec8p6tfym"]
+
+[ext_resource type="Script" path="res://ui/components/status_popup.gd" id="1_0yf3h"]
+[ext_resource type="Texture2D" uid="uid://d0hng0ey0hjx1" path="res://ui/components/circle.png" id="2_50pxg"]
+
+[sub_resource type="Animation" id="Animation_opcp0"]
+resource_name = "loading"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:value")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 100.0, 100.0, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:fill_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_38xhs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:fill_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_t7m1n"]
+resource_name = "rotate"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8gfcn"]
+_data = {
+"RESET": SubResource("Animation_38xhs"),
+"loading": SubResource("Animation_opcp0"),
+"rotate": SubResource("Animation_t7m1n")
+}
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_cn0a1"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cnii8"]
+animation = &"rotate"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xxgbh"]
+animation = &"loading"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wt7hn"]
+graph_offset = Vector2(-201.455, -233.818)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_cn0a1")
+nodes/Add2/position = Vector2(380, -60)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_xxgbh")
+nodes/Animation/position = Vector2(160, 40)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_cnii8")
+"nodes/Animation 2/position" = Vector2(160, -100)
+nodes/output/position = Vector2(580, -20)
+node_connections = [&"Add2", 0, &"Animation 2", &"Add2", 1, &"Animation", &"output", 0, &"Add2"]
+
+[node name="StatusPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0yf3h")
+
+[node name="StatusPopup" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.129412, 0.129412, 0.129412, 0.862745)
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -11.0
+offset_right = 500.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Some status message..."
+horizontal_alignment = 1
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = 18.0
+offset_right = 64.0
+offset_bottom = 146.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(64, 64)
+fill_mode = 4
+texture_progress = ExtResource("2_50pxg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TextureProgressBar"]
+libraries = {
+"": SubResource("AnimationLibrary_8gfcn")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="TextureProgressBar"]
+libraries = {
+"": SubResource("AnimationLibrary_8gfcn")
+}
+tree_root = SubResource("AnimationNodeBlendTree_wt7hn")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Add2/add_amount = 1.0

@@ -1,8 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://dy4x4kievfih5"]
+[gd_scene load_steps=3 format=3 uid="uid://dy4x4kievfih5"]
 
 [ext_resource type="Script" path="res://networking/bellhop/signalling_manager.gd" id="1_tmafj"]
+[ext_resource type="PackedScene" uid="uid://bq1snp4huexai" path="res://ui/multiplayer/multiplayer_menu.tscn" id="2_hbue0"]
 
 [node name="Main" type="Node"]
 
 [node name="SignallingManager" type="Node" parent="."]
 script = ExtResource("1_tmafj")
+
+[node name="MultiplayerMenu" parent="." node_paths=PackedStringArray("signalling_manager") instance=ExtResource("2_hbue0")]
+signalling_manager = NodePath("../SignallingManager")

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq1snp4huexai"]
+
+[ext_resource type="Script" path="res://ui/multiplayer/multiplayer_menu.gd" id="1_e1j5i"]
+[ext_resource type="PackedScene" uid="uid://bu0dec8p6tfym" path="res://ui/components/status_popup.tscn" id="4_f7ped"]
+
+[node name="MultiplayerMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e1j5i")
+
+[node name="ActiveUI" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConnectingPopup" parent="." instance=ExtResource("4_f7ped")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+text = "Connecting to signalling server..."

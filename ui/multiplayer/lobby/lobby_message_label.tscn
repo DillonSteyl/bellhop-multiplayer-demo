@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c33xoo78dxfmd"]
+
+[node name="LobbyMessageLabel" type="RichTextLabel"]
+custom_minimum_size = Vector2(0, 25)
+focus_mode = 2
+text = "deez fucking NUTS"
+fit_content = true
+selection_enabled = true
