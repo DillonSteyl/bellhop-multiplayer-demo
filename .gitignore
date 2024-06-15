@@ -1,11 +1,10 @@
 # Godot 4+ specific ignores
 .godot/
 
-# Secrets
-secrets/*
-
 # VSCode
 .vscode
 
-# Addons
+# Custom ignore folders
 addons/*
+exports/*
+secrets/*
