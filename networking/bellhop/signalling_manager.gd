@@ -56,7 +56,7 @@ func _handle_bellhop_event(event: BellhopEvent):
 		return
 	if event is BellhopReceivedJoinRequest:
 		pushed_info_message.emit(
-			"Received join request from: {id}. Accepting...".format({"id": event.connection_id})
+			"Received join request from: {id}".format({"id": event.connection_id})
 		)
 		received_join_request.emit(event)
 		return
