@@ -26,34 +26,55 @@ text = "Lobby"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="MessagesPanel" type="Panel" parent="."]
+[node name="ChatContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -347.0
-offset_top = -228.0
-offset_right = 348.0
-offset_bottom = 202.0
+offset_left = -385.0
+offset_top = -227.0
+offset_right = 385.0
+offset_bottom = 228.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MessagesPanel"]
+[node name="MessagesPanel" type="Panel" parent="ChatContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MessagesScrollContainer" type="ScrollContainer" parent="ChatContainer/MessagesPanel"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+follow_focus = true
 
-[node name="MessagesVBox" type="VBoxContainer" parent="MessagesPanel/ScrollContainer"]
+[node name="MessagesVBox" type="VBoxContainer" parent="ChatContainer/MessagesPanel/MessagesScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 2
+
+[node name="SendMessageHBox" type="HBoxContainer" parent="ChatContainer"]
+layout_mode = 2
+
+[node name="MessageLineEdit" type="LineEdit" parent="ChatContainer/SendMessageHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SendButton" type="Button" parent="ChatContainer/SendMessageHBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Send"
 
 [node name="ButtonsHBox" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -63,7 +84,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -130.0
-offset_top = -84.0
+offset_top = -73.0
 offset_right = 131.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -74,10 +95,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 size_flags_vertical = 0
-text = "Back
-"
+text = "Leave"
 
 [node name="StatusPopup" parent="." instance=ExtResource("2_gakky")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[connection signal="text_submitted" from="ChatContainer/SendMessageHBox/MessageLineEdit" to="." method="_on_message_line_edit_text_submitted"]
+[connection signal="pressed" from="ChatContainer/SendMessageHBox/SendButton" to="." method="_on_send_message"]

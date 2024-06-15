@@ -7,6 +7,11 @@ static func start_lobby() -> String:
 	return JSON.stringify(request)
 
 
+static func close_lobby() -> String:
+	var request = {"action": "close_lobby"}
+	return JSON.stringify(request)
+
+
 static func join_lobby(lobby_id: String) -> String:
 	var request = {
 		"action": "join_lobby",

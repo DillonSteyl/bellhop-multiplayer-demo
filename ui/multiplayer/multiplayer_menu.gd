@@ -1,6 +1,7 @@
+class_name MultiplayerMenu
 extends Control
 
-const BASE_MENU_SCENE: PackedScene = preload("res://ui/multiplayer/multiplayer_menu_base.tscn")
+const HOME_MENU_SCENE: PackedScene = preload("res://ui/multiplayer/multiplayer_menu_home.tscn")
 const LOBBY_UI_SCENE: PackedScene = preload("res://ui/multiplayer/lobby/lobby_ui.tscn")
 
 @export var signalling_manager: SignallingManager
@@ -10,33 +11,36 @@ const LOBBY_UI_SCENE: PackedScene = preload("res://ui/multiplayer/lobby/lobby_ui
 
 
 func _ready():
-	_go_to_base()
+	go_to_home()
 	connecting_popup.show_popup()
 	signalling_manager.websocket_opened.connect(connecting_popup.hide_popup)
 
 
-func _go_to_base():
+func go_to_home():
+	signalling_manager.close_lobby()
 	_clear_active_ui()
-	var ui: MultiplayerMenuBase = BASE_MENU_SCENE.instantiate()
+	var ui: MultiplayerMenuHome = HOME_MENU_SCENE.instantiate()
 	active_ui.add_child(ui)
 	ui.start_lobby_button.pressed.connect(_start_lobby)
+	ui.join_lobby_popup.requested_to_join.connect(signalling_manager.join_lobby)
+
+
+func go_to_lobby() -> LobbyUI:
+	_clear_active_ui()
+	var ui: LobbyUI = LOBBY_UI_SCENE.instantiate()
+	active_ui.add_child(ui, true)
+	ui.name = "LobbyUI"
+	ui.back_button.pressed.connect(go_to_home)
+	return ui
 
 
 func _start_lobby():
-	var lobby_ui = _go_to_lobby()
+	var lobby_ui = go_to_lobby()
 	signalling_manager.start_lobby()
 
-	lobby_ui.initialize("Creating lobby...")
+	lobby_ui.set_loading("Creating lobby...")
 	signalling_manager.lobby_started.connect(lobby_ui._on_lobby_started)
 	signalling_manager.pushed_info_message.connect(lobby_ui.add_message)
-
-
-func _go_to_lobby() -> LobbyUI:
-	_clear_active_ui()
-	var ui: LobbyUI = LOBBY_UI_SCENE.instantiate()
-	active_ui.add_child(ui)
-	ui.back_button.pressed.connect(_go_to_base)
-	return ui
 
 
 func _clear_active_ui():

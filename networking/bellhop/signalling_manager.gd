@@ -7,6 +7,7 @@ signal connection_state_changed(new_state: WebSocketPeer.State)
 signal websocket_opened
 signal websocket_closed
 signal pushed_info_message(message: String)
+signal lobby_closed
 
 signal lobby_started(event: BellhopLobbyStarted)
 signal received_join_request(event: BellhopReceivedJoinRequest)
@@ -41,12 +42,26 @@ func start_lobby():
 	_ws_peer.send_text(BellhopActionMessages.start_lobby())
 
 
+func close_lobby():
+	lobby_closed.emit()
+	if _ws_peer.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		_ws_peer.send_text(BellhopActionMessages.close_lobby())
+
+
 func accept_join_request(connection_id: String, peer_id: int):
 	_ws_peer.send_text(BellhopActionMessages.accept_join_request(connection_id, peer_id))
 
 
 func join_lobby(lobby_id: String):
 	_ws_peer.send_text(BellhopActionMessages.join_lobby(lobby_id))
+
+
+func send_ice_candidate(connection_id: String, candidate: IceCandidate):
+	_ws_peer.send_text(BellhopActionMessages.send_ice_candidate(connection_id, candidate))
+
+
+func send_session_description(connection_id: String, description: SessionDescription):
+	_ws_peer.send_text(BellhopActionMessages.send_session_description(connection_id, description))
 
 
 func _handle_bellhop_event(event: BellhopEvent):
