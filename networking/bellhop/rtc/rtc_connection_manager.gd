@@ -25,7 +25,8 @@ var ice_candidate_queue: Array[BellhopReceivedIceCandidate] = []
 
 
 func _ready():
-	connection.initialize(CONFIG)
+	var config = CONFIG.merged(Secrets.turn_servers_config)
+	connection.initialize(config)
 	connection.session_description_created.connect(_on_session_description_created)
 	connection.ice_candidate_created.connect(_on_ice_candidate_created)
 
