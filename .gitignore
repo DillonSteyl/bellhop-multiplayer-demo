@@ -6,3 +6,6 @@ secrets/*
 
 # VSCode
 .vscode
+
+# Addons
+addons/*
