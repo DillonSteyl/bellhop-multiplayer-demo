@@ -22,6 +22,7 @@ const CONFIG = {
 
 var connection = WebRTCPeerConnection.new()
 var ice_candidate_queue: Array[BellhopReceivedIceCandidate] = []
+var is_remote_description_set: bool = false
 
 
 func _ready():
@@ -34,13 +35,12 @@ func _ready():
 func _process(_delta):
 	connection.poll()
 
-	if connection.get_gathering_state() == WebRTCPeerConnection.GATHERING_STATE_GATHERING:
+	if is_remote_description_set and ice_candidate_queue.size() > 0:
 		for ice_candidate in ice_candidate_queue:
 			connection.add_ice_candidate(
 				ice_candidate.media, ice_candidate.index, ice_candidate.name
 			)
 		ice_candidate_queue.clear()
-		return
 
 
 func _on_ice_candidate_created(media: String, index: int, candidate_name: String):
@@ -75,3 +75,4 @@ func _on_received_session_description(event: BellhopReceivedSessionDescription):
 	if event.connection_id != destination_connection_id:
 		return
 	connection.set_remote_description(event.session_type, event.sdp)
+	set_deferred("is_remote_description_set", true)
