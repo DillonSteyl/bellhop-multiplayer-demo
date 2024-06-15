@@ -1,12 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://dy4x4kievfih5"]
+[gd_scene load_steps=4 format=3 uid="uid://dy4x4kievfih5"]
 
+[ext_resource type="Script" path="res://main.gd" id="1_ln2vu"]
 [ext_resource type="Script" path="res://networking/bellhop/signalling_manager.gd" id="1_tmafj"]
 [ext_resource type="PackedScene" uid="uid://bq1snp4huexai" path="res://ui/multiplayer/multiplayer_menu.tscn" id="2_hbue0"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_ln2vu")
 
 [node name="SignallingManager" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("1_tmafj")
 
 [node name="MultiplayerMenu" parent="." node_paths=PackedStringArray("signalling_manager") instance=ExtResource("2_hbue0")]
+unique_name_in_owner = true
 signalling_manager = NodePath("../SignallingManager")
+
+[connection signal="join_request_accepted" from="SignallingManager" to="." method="_on_signalling_manager_join_request_accepted"]
+[connection signal="lobby_closed" from="SignallingManager" to="." method="_on_signalling_manager_lobby_closed"]
+[connection signal="lobby_started" from="SignallingManager" to="." method="_on_signalling_manager_lobby_started"]
+[connection signal="received_join_request" from="SignallingManager" to="." method="_on_signalling_manager_received_join_request"]
