@@ -1,20 +1,7 @@
 class_name RTCConnectionManager
 extends Node
 
-const CONFIG = {
-	"iceServers":
-	[
-		{
-			"urls":
-			[
-				"stun:stun1.l.google.com:19302",
-				"stun:stun2.l.google.com:19302",
-				"stun:stun3.l.google.com:19302",
-				"stun:stun4.l.google.com:19302",
-			],
-		},
-	]
-}
+const STUN_CONFIG = {"urls": ["stun:stun.l.google.com:19302"]}
 
 @export var destination_connection_id: String
 @export var destination_peer_id: int
@@ -26,7 +13,13 @@ var is_remote_description_set: bool = false
 
 
 func _ready():
-	var config = CONFIG.merged(Secrets.turn_servers_config)
+	var config = {
+		"iceServers":
+		[
+			STUN_CONFIG,
+			Secrets.turn_servers_config,
+		]
+	}
 	connection.initialize(config)
 	connection.session_description_created.connect(_on_session_description_created)
 	connection.ice_candidate_created.connect(_on_ice_candidate_created)
