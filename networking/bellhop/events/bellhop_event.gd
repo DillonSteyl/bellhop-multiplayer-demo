@@ -2,6 +2,7 @@ class_name BellhopEvent
 extends Resource
 
 const LOBBY_STARTED = "lobby_started"
+const LOBBY_CREATION_FAILED = "lobby_creation_failed"
 const RECEIVED_JOIN_REQUEST = "received_join_request"
 const JOIN_REQUEST_ACCEPTED = "join_request_accepted"
 const JOIN_REQUEST_REJECTED = "join_request_rejected"
@@ -19,6 +20,8 @@ static func create(event_type: String, content: Dictionary):
 	match event_type:
 		LOBBY_STARTED:
 			event = BellhopLobbyStarted.new()
+		LOBBY_CREATION_FAILED:
+			event = BellhopLobbyCreationFailed.new()
 		RECEIVED_JOIN_REQUEST:
 			event = BellhopReceivedJoinRequest.new()
 		JOIN_REQUEST_ACCEPTED:

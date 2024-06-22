@@ -10,6 +10,7 @@ signal pushed_info_message(message: String)
 signal lobby_closed
 
 signal lobby_started(event: BellhopLobbyStarted)
+signal lobby_creation_failed(event: BellhopLobbyCreationFailed)
 signal received_join_request(event: BellhopReceivedJoinRequest)
 signal join_request_accepted(event: BellhopJoinRequestAccepted)
 signal join_request_rejected(event: BellhopJoinRequestRejected)
@@ -38,8 +39,8 @@ func _process(_delta):
 		_handle_bellhop_event(event)
 
 
-func start_lobby():
-	_ws_peer.send_text(BellhopActionMessages.start_lobby())
+func start_lobby(lobby_id: String):
+	_ws_peer.send_text(BellhopActionMessages.start_lobby(lobby_id))
 
 
 func close_lobby():
@@ -68,6 +69,9 @@ func _handle_bellhop_event(event: BellhopEvent):
 	if event is BellhopLobbyStarted:
 		pushed_info_message.emit("Lobby started! id: " + event.lobby_id)
 		lobby_started.emit(event)
+		return
+	if event is BellhopLobbyCreationFailed:
+		lobby_creation_failed.emit(event)
 		return
 	if event is BellhopReceivedJoinRequest:
 		pushed_info_message.emit(
