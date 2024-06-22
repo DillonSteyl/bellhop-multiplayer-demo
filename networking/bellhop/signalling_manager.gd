@@ -9,6 +9,7 @@ signal websocket_closed
 signal pushed_info_message(message: String)
 signal lobby_closed
 
+signal internal_server_error
 signal lobby_started(event: BellhopLobbyStarted)
 signal lobby_creation_failed(event: BellhopLobbyCreationFailed)
 signal received_join_request(event: BellhopReceivedJoinRequest)
@@ -100,6 +101,11 @@ func _get_bellhop_event(packet: PackedByteArray) -> BellhopEvent:
 	var err = json.parse(packet.get_string_from_utf8())
 	if err != OK:
 		push_error("Failed to parse JSON packet: %s" % [err])
+		return
+
+	if json.data.get("message") == "Internal server error":
+		push_error("Internal server error.")
+		internal_server_error.emit()
 		return
 
 	var event = json.data.get("event")

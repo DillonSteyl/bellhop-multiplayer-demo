@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://0ctqkt7rh8rn"]
+[gd_scene load_steps=5 format=3 uid="uid://0ctqkt7rh8rn"]
 
 [ext_resource type="Script" path="res://ui/multiplayer/multiplayer_menu_home.gd" id="1_e1slr"]
 [ext_resource type="PackedScene" uid="uid://vs38hxd3cm0b" path="res://ui/multiplayer/lobby_name_popup.tscn" id="2_liddj"]
 [ext_resource type="PackedScene" uid="uid://bu0dec8p6tfym" path="res://ui/components/status_popup.tscn" id="3_i4o72"]
+[ext_resource type="PackedScene" uid="uid://taeoeye2d02o" path="res://ui/components/notification_popup.tscn" id="4_0y4ex"]
 
 [node name="MultiplayerMenuHome" type="Control"]
 layout_mode = 3
@@ -70,6 +71,11 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 text = "Joining lobby..."
+
+[node name="FailedNotificationPopup" parent="." instance=ExtResource("4_0y4ex")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="ButtonsContainer/StartLobbyButton" to="." method="_on_start_lobby_button_pressed"]
 [connection signal="pressed" from="ButtonsContainer/JoinLobbyButton" to="." method="_on_join_lobby_button_pressed"]

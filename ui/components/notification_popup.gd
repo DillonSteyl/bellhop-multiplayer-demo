@@ -24,3 +24,7 @@ func _set_text(value: String):
 	text = value
 	if label:
 		label.text = value
+
+
+func _on_confirm_button_pressed() -> void:
+	hide_popup()

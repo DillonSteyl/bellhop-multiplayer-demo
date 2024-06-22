@@ -51,3 +51,5 @@ offset_bottom = 85.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "OK"
+
+[connection signal="pressed" from="ConfirmButton" to="." method="_on_confirm_button_pressed"]

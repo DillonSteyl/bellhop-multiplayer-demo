@@ -23,6 +23,9 @@ func go_to_home():
 	active_ui.add_child(ui)
 	ui.start_lobby_popup.submitted_lobby_name.connect(_start_lobby)
 	ui.join_lobby_popup.submitted_lobby_name.connect(signalling_manager.join_lobby)
+	signalling_manager.internal_server_error.connect(
+		func(): ui._show_failure_notifaction("Internal server error.")
+	)
 
 
 func go_to_lobby() -> LobbyUI:
