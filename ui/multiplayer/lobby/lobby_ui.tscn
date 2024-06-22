@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgl784go08gjt"]
+[gd_scene load_steps=4 format=3 uid="uid://bgl784go08gjt"]
 
 [ext_resource type="Script" path="res://ui/multiplayer/lobby/lobby_ui.gd" id="1_jwk81"]
 [ext_resource type="PackedScene" uid="uid://bu0dec8p6tfym" path="res://ui/components/status_popup.tscn" id="2_gakky"]
+[ext_resource type="PackedScene" uid="uid://taeoeye2d02o" path="res://ui/components/notification_popup.tscn" id="3_ctx4b"]
 
 [node name="LobbyUI" type="Control"]
 layout_mode = 3
@@ -98,6 +99,11 @@ size_flags_vertical = 0
 text = "Leave"
 
 [node name="StatusPopup" parent="." instance=ExtResource("2_gakky")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="FailedNotificationPopup" parent="." instance=ExtResource("3_ctx4b")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

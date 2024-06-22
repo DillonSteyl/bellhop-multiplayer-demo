@@ -2,8 +2,8 @@ class_name BellhopActionMessages
 extends Object
 
 
-static func start_lobby() -> String:
-	var request = {"action": "start_lobby"}
+static func start_lobby(lobby_id: String) -> String:
+	var request = {"action": "start_lobby", "content": {"lobby_id": lobby_id}}
 	return JSON.stringify(request)
 
 

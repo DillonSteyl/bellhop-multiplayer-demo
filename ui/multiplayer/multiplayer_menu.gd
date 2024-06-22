@@ -21,8 +21,8 @@ func go_to_home():
 	_clear_active_ui()
 	var ui: MultiplayerMenuHome = HOME_MENU_SCENE.instantiate()
 	active_ui.add_child(ui)
-	ui.start_lobby_button.pressed.connect(_start_lobby)
-	ui.join_lobby_popup.requested_to_join.connect(signalling_manager.join_lobby)
+	ui.start_lobby_popup.submitted_lobby_name.connect(_start_lobby)
+	ui.join_lobby_popup.submitted_lobby_name.connect(signalling_manager.join_lobby)
 
 
 func go_to_lobby() -> LobbyUI:
@@ -31,15 +31,17 @@ func go_to_lobby() -> LobbyUI:
 	active_ui.add_child(ui, true)
 	ui.name = "LobbyUI"
 	ui.back_button.pressed.connect(go_to_home)
+	ui.failed_notification_popup.confirm_button.pressed.connect(go_to_home)
 	return ui
 
 
-func _start_lobby():
+func _start_lobby(lobby_id: String):
 	var lobby_ui = go_to_lobby()
-	signalling_manager.start_lobby()
+	signalling_manager.start_lobby(lobby_id)
 
 	lobby_ui.set_loading("Creating lobby...")
 	signalling_manager.lobby_started.connect(lobby_ui._on_lobby_started)
+	signalling_manager.lobby_creation_failed.connect(lobby_ui._on_lobby_creation_failed)
 	signalling_manager.pushed_info_message.connect(lobby_ui.add_message)
 
 

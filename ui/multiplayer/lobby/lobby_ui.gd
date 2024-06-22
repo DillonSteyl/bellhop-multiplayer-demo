@@ -10,6 +10,7 @@ const LOBBY_MESSAGE_LABEL_SCENE: PackedScene = preload(
 @onready var messages_scroll_container: ScrollContainer = $%MessagesScrollContainer
 @onready var status_popup: StatusPopup = $%StatusPopup
 @onready var message_line_edit: LineEdit = $%MessageLineEdit
+@onready var failed_notification_popup: NotificationPopup = $%FailedNotificationPopup
 
 
 func _ready():
@@ -34,6 +35,12 @@ func add_chat_message(message: String):
 
 func _on_lobby_started(_event: BellhopLobbyStarted):
 	status_popup.hide_popup()
+
+
+func _on_lobby_creation_failed(event: BellhopLobbyCreationFailed):
+	status_popup.hide_popup()
+	failed_notification_popup.text = "Failed to create lobby: {reason}".format({"reason": event.reason})
+	failed_notification_popup.show()
 
 
 func _on_send_message():

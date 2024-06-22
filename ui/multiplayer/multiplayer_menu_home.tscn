@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://0ctqkt7rh8rn"]
 
 [ext_resource type="Script" path="res://ui/multiplayer/multiplayer_menu_home.gd" id="1_e1slr"]
-[ext_resource type="PackedScene" uid="uid://vs38hxd3cm0b" path="res://ui/multiplayer/join_lobby_popup.tscn" id="2_liddj"]
+[ext_resource type="PackedScene" uid="uid://vs38hxd3cm0b" path="res://ui/multiplayer/lobby_name_popup.tscn" id="2_liddj"]
 [ext_resource type="PackedScene" uid="uid://bu0dec8p6tfym" path="res://ui/components/status_popup.tscn" id="3_i4o72"]
 
 [node name="MultiplayerMenuHome" type="Control"]
@@ -46,11 +46,34 @@ layout_mode = 1
 offset_top = 0.0
 offset_bottom = 0.0
 
+[node name="Title" parent="JoinLobbyPopup" index="0"]
+text = "Join Lobby"
+
+[node name="StartLobbyPopup" parent="." instance=ExtResource("2_liddj")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = -275.0
+offset_top = -100.0
+offset_right = 275.0
+offset_bottom = 100.0
+
+[node name="Title" parent="StartLobbyPopup" index="0"]
+text = "Start Lobby"
+
+[node name="SubmitButton" parent="StartLobbyPopup" index="2"]
+text = "Start
+"
+
 [node name="JoiningLobbyStatusPopup" parent="." instance=ExtResource("3_i4o72")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 text = "Joining lobby..."
 
+[connection signal="pressed" from="ButtonsContainer/StartLobbyButton" to="." method="_on_start_lobby_button_pressed"]
 [connection signal="pressed" from="ButtonsContainer/JoinLobbyButton" to="." method="_on_join_lobby_button_pressed"]
-[connection signal="requested_to_join" from="JoinLobbyPopup" to="." method="_on_join_lobby_popup_requested_to_join"]
+[connection signal="submitted_lobby_name" from="JoinLobbyPopup" to="." method="_on_join_lobby_popup_submitted_lobby_name"]
+
+[editable path="JoinLobbyPopup"]
+[editable path="StartLobbyPopup"]
