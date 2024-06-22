@@ -26,6 +26,9 @@ func go_to_home():
 	signalling_manager.internal_server_error.connect(
 		func(): ui._show_failure_notifaction("Internal server error.")
 	)
+	signalling_manager.join_request_rejected.connect(
+		func(event): ui._show_failure_notifaction("Join request rejected: " + event.reason)
+	)
 
 
 func go_to_lobby() -> LobbyUI:
