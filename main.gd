@@ -11,6 +11,7 @@ func _on_signalling_manager_lobby_started(_event: BellhopLobbyStarted):
 	rtc_peer_manager = RTCHostManager.new()
 	rtc_peer_manager.signalling_manager = signalling_manager
 	add_child(rtc_peer_manager)
+	MultiplayerManager._add_player(1, MultiplayerManager.player_info)
 
 
 func _on_signalling_manager_join_request_accepted(event: BellhopJoinRequestAccepted):

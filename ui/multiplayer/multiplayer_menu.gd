@@ -23,6 +23,7 @@ func go_to_home():
 	active_ui.add_child(ui)
 	ui.start_lobby_popup.submitted_lobby_name.connect(_start_lobby)
 	ui.join_lobby_popup.submitted_lobby_name.connect(signalling_manager.join_lobby)
+	ui.player_name_line_edit.text_changed.connect(MultiplayerManager.update_player_name)
 	signalling_manager.internal_server_error.connect(
 		func(): ui._show_failure_notifaction("Internal server error.")
 	)
@@ -35,9 +36,10 @@ func go_to_lobby() -> LobbyUI:
 	_clear_active_ui()
 	var ui: LobbyUI = LOBBY_UI_SCENE.instantiate()
 	active_ui.add_child(ui, true)
-	ui.name = "LobbyUI"
 	ui.back_button.pressed.connect(go_to_home)
 	ui.failed_notification_popup.confirm_button.pressed.connect(go_to_home)
+
+	MultiplayerManager.player_connected.connect(ui.players_vbox.add_player)
 	return ui
 
 

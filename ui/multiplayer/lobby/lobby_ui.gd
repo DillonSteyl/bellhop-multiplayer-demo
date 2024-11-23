@@ -7,6 +7,7 @@ const LOBBY_MESSAGE_LABEL_SCENE: PackedScene = preload(
 
 @onready var back_button: Button = $%BackButton
 @onready var messages_vbox: VBoxContainer = $%MessagesVBox
+@onready var players_vbox: PlayersVBox = $%PlayersVBox
 @onready var messages_scroll_container: ScrollContainer = $%MessagesScrollContainer
 @onready var status_popup: StatusPopup = $%StatusPopup
 @onready var message_line_edit: LineEdit = $%MessageLineEdit
@@ -15,6 +16,9 @@ const LOBBY_MESSAGE_LABEL_SCENE: PackedScene = preload(
 
 func _ready():
 	messages_scroll_container.get_v_scroll_bar().changed.connect(_scroll_to_bottom)
+	for player_id in MultiplayerManager.players_by_id:
+		var player_info = MultiplayerManager.players_by_id[player_id]
+		players_vbox.add_player(player_id, player_info)
 
 
 func set_loading(status_text: String):
@@ -30,7 +34,12 @@ func add_message(text: String):
 
 @rpc("any_peer", "call_local", "reliable")
 func add_chat_message(message: String):
-	add_message(message)
+	var player_id = multiplayer.get_remote_sender_id()
+	var player_info = MultiplayerManager.players_by_id[player_id]
+	var message_text = "{player_name}: {message}".format(
+		{"player_name": player_info.player_name, "message": message}
+	)
+	add_message(message_text)
 
 
 func _on_lobby_started(_event: BellhopLobbyStarted):
@@ -39,16 +48,14 @@ func _on_lobby_started(_event: BellhopLobbyStarted):
 
 func _on_lobby_creation_failed(event: BellhopLobbyCreationFailed):
 	status_popup.hide_popup()
-	failed_notification_popup.text = "Failed to create lobby: {reason}".format({"reason": event.reason})
+	failed_notification_popup.text = "Failed to create lobby: {reason}".format(
+		{"reason": event.reason}
+	)
 	failed_notification_popup.show()
 
 
 func _on_send_message():
-	add_chat_message.rpc(
-		"{pid} says: {text}".format(
-			{"pid": multiplayer.get_unique_id(), "text": message_line_edit.text}
-		)
-	)
+	add_chat_message.rpc(message_line_edit.text)
 	message_line_edit.clear()
 
 

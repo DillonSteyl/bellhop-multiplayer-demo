@@ -7,6 +7,7 @@ extends Control
 @onready var start_lobby_popup: LobbyNamePopup = $%StartLobbyPopup
 @onready var joining_status_popup: StatusPopup = $%JoiningLobbyStatusPopup
 @onready var failed_notification_popup: NotificationPopup = $%FailedNotificationPopup
+@onready var player_name_line_edit: LineEdit = $%PlayerNameLineEdit
 
 
 func _on_join_lobby_button_pressed():

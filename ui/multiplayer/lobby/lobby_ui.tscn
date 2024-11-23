@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgl784go08gjt"]
+[gd_scene load_steps=5 format=3 uid="uid://bgl784go08gjt"]
 
 [ext_resource type="Script" path="res://ui/multiplayer/lobby/lobby_ui.gd" id="1_jwk81"]
 [ext_resource type="PackedScene" uid="uid://bu0dec8p6tfym" path="res://ui/components/status_popup.tscn" id="2_gakky"]
+[ext_resource type="PackedScene" uid="uid://cy1wfxtj00cxk" path="res://ui/multiplayer/lobby/players_vbox/players_vbox.tscn" id="2_q65l2"]
 [ext_resource type="PackedScene" uid="uid://taeoeye2d02o" path="res://ui/components/notification_popup.tscn" id="3_ctx4b"]
 
 [node name="LobbyUI" type="Control"]
@@ -27,27 +28,33 @@ text = "Lobby"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="ChatContainer" type="VBoxContainer" parent="."]
+[node name="ChatAndPlayers" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -385.0
-offset_top = -227.0
-offset_right = 385.0
-offset_bottom = 228.0
+offset_left = -396.0
+offset_top = -212.0
+offset_right = 396.0
+offset_bottom = 212.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="ChatContainer" type="VBoxContainer" parent="ChatAndPlayers"]
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="MessagesPanel" type="Panel" parent="ChatContainer"]
+[node name="MessagesPanel" type="Panel" parent="ChatAndPlayers/ChatContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MessagesScrollContainer" type="ScrollContainer" parent="ChatContainer/MessagesPanel"]
+[node name="MessagesScrollContainer" type="ScrollContainer" parent="ChatAndPlayers/ChatContainer/MessagesPanel"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -57,25 +64,47 @@ grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
 
-[node name="MessagesVBox" type="VBoxContainer" parent="ChatContainer/MessagesPanel/MessagesScrollContainer"]
+[node name="MessagesVBox" type="VBoxContainer" parent="ChatAndPlayers/ChatContainer/MessagesPanel/MessagesScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 2
 
-[node name="SendMessageHBox" type="HBoxContainer" parent="ChatContainer"]
+[node name="SendMessageHBox" type="HBoxContainer" parent="ChatAndPlayers/ChatContainer"]
 layout_mode = 2
 
-[node name="MessageLineEdit" type="LineEdit" parent="ChatContainer/SendMessageHBox"]
+[node name="MessageLineEdit" type="LineEdit" parent="ChatAndPlayers/ChatContainer/SendMessageHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SendButton" type="Button" parent="ChatContainer/SendMessageHBox"]
+[node name="SendButton" type="Button" parent="ChatAndPlayers/ChatContainer/SendMessageHBox"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Send"
+
+[node name="PlayersPanel" type="Panel" parent="ChatAndPlayers"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ChatAndPlayers/PlayersPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 32.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
+text = "Players"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="PlayersVBox" parent="ChatAndPlayers/PlayersPanel" instance=ExtResource("2_q65l2")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 12.0
+offset_top = 46.0
+offset_right = -11.0
 
 [node name="ButtonsHBox" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -108,5 +137,5 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[connection signal="text_submitted" from="ChatContainer/SendMessageHBox/MessageLineEdit" to="." method="_on_message_line_edit_text_submitted"]
-[connection signal="pressed" from="ChatContainer/SendMessageHBox/SendButton" to="." method="_on_send_message"]
+[connection signal="text_submitted" from="ChatAndPlayers/ChatContainer/SendMessageHBox/MessageLineEdit" to="." method="_on_message_line_edit_text_submitted"]
+[connection signal="pressed" from="ChatAndPlayers/ChatContainer/SendMessageHBox/SendButton" to="." method="_on_send_message"]
